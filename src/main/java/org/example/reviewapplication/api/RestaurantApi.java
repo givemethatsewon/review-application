@@ -5,7 +5,14 @@ import org.example.reviewapplication.api.request.CreateAndEditRestaurantRequest;
 import org.example.reviewapplication.api.response.RestaurantDetailView;
 import org.example.reviewapplication.api.response.RestaurantView;
 import org.example.reviewapplication.model.RestaurantEntity;
+import org.example.reviewapplication.model.ReviewEntity;
+import org.example.reviewapplication.repository.ReviewRepository;
 import org.example.reviewapplication.service.RestaurantService;
+import org.example.reviewapplication.service.ReviewService;
+import org.example.reviewapplication.service.dto.ReviewDto;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RestaurantApi {
     private final RestaurantService restaurantService;
+    private final ReviewService reviewService;
 
     @GetMapping("/restaurants")
     public List<RestaurantView> getRestaurants() {
@@ -49,12 +57,13 @@ public class RestaurantApi {
     ) {
         restaurantService.deleteRestaurant(restaurantId);
     }
-
     @GetMapping("/restaurants/{restaurantId}/reviews")
-    public String getRestaurantReviews(
-            @PathVariable Long restaurantId
+    public ReviewDto getRestaurantReviews(
+            @PathVariable("restaurantId") Long restaurantId,
+            @RequestParam("offset") Integer offset,
+            @RequestParam("limit") Integer limit
     ) {
-        return "get restaurant " + restaurantId + " reviews";
-    }
 
+        return reviewService.getRestaurantReviews(restaurantId, PageRequest.of(offset / limit, limit));
+    }
 }

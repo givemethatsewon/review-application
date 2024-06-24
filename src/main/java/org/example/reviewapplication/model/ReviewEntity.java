@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.ZonedDateTime;
 
 @Table(name = "review")
 @Builder
@@ -22,5 +21,4 @@ public class ReviewEntity {
     private Long restaurantId;
     private String content;
     private Double score;
-    private ZonedDateTime createdAt;
 }
